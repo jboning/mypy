@@ -11,12 +11,12 @@ if sys.version_info < (3, 2, 0):
 
 from setuptools import setup
 from setuptools.command.build_py import build_py
-from mypy.version import base_version
+from mypy.version import __version__, base_version
 from mypy import git
 
 git.verify_git_integrity_or_abort(".")
 
-version = base_version
+version = __version__
 description = 'Optional static typing for Python'
 long_description = '''
 Mypy -- Optional Static Typing for Python
@@ -58,7 +58,7 @@ class CustomPythonBuild(build_py):
         path = os.path.join(self.build_lib, 'mypy')
         self.mkpath(path)
         with open(os.path.join(path, 'version.py'), 'w') as stream:
-            stream.write('__version__ = "{}"\n'.format(version))
+            stream.write('__version__ = "{}"\n'.format(base_version))
 
     def run(self):
         self.execute(self.pin_version, ())
@@ -99,7 +99,7 @@ if sys.version_info < (3, 5):
     install_requires.append('typing >= 3.5.2')
 
 setup(name='mypy-lang',
-      version=version,
+      version=base_version,
       description=description,
       long_description=long_description,
       author='Jukka Lehtosalo',
